@@ -298,6 +298,43 @@ manifest = env.NVDAManifest(os.path.join("addon", "manifest.ini"), os.path.join(
 # Ensure manifest is rebuilt if buildVars is updated.
 env.Depends(manifest, "buildVars.py")
 
+# Build C++ files
+cppenv = Environment(
+	CCFLAGS=[
+		"/EHsc",
+		"/O2",
+		"/GL",
+		"/std:c++20",
+		"/permissive-",
+		"/MT",
+		"/W3",
+		"/WX",
+	],
+	CPPDEFINES=[
+		"UNICODE",
+		"WIN32",
+		"NDEBUG",
+		"NOMINMAX",
+	],
+	LINKFLAGS=[
+		"/LTCG",
+		"/OPT:REF",
+	],
+	TARGET_ARCH="x86",
+)
+detoursLib = cppenv.StaticLibrary(
+	srcdir="include/Detours/src",
+	source=["detours.cpp", "disasm.cpp", "modules.cpp"],
+)
+hookDll = cppenv.SharedLibrary(
+	target="addon/globalPlugins/audioDuckingEnabler/hookDll",
+	srcdir="addon/globalPlugins/audioDuckingEnabler",
+	source=["dllmain.cpp"],
+	LIBS=["advapi32", detoursLib],
+	CPPPATH=["include/Detours/src"],
+)
+
+env.Depends(addon, hookDll)
 env.Depends(addon, manifest)
 env.Default(addon)
 env.Clean(addon, [".sconsign.dblite", "addon/doc/" + buildVars.baseLanguage + "/"])

@@ -16,37 +16,36 @@ def _(arg):
 # Add-on information variables
 addon_info = {
 	# add-on Name/identifier, internal for NVDA
-	"addon_name": "addonTemplate",
+	"addon_name": "audioDuckingEnabler",
 	# Add-on summary/title, usually the user visible name of the add-on
 	# Translators: Summary/title for this add-on
 	# to be shown on installation and add-on information found in add-on store
-	"addon_summary": _("Add-on user visible name"),
+	"addon_summary": _("Audio Ducking Enabler"),
 	# Add-on description
 	# Translators: Long description to be shown for this add-on on add-on information from add-on store
-	"addon_description": _("""Description for the add-on.
-It can span multiple lines."""),
+	"addon_description": _("""Enables audio ducking when using portable copies of NVDA."""),
 	# version
-	"addon_version": "x.y",
+	"addon_version": "1.0",
 	# Author(s)
-	"addon_author": "name <name@domain.com>",
+	"addon_author": "gexgd0419 <gexgd0419@outlook.com>",
 	# URL for the add-on documentation support
-	"addon_url": None,
+	"addon_url": "https://github.com/gexgd0419/AudioDuckingEnabler",
 	# URL for the add-on repository where the source code can be found
-	"addon_sourceURL": None,
+	"addon_sourceURL": "https://github.com/gexgd0419/AudioDuckingEnabler",
 	# Documentation file name
 	"addon_docFileName": "readme.html",
 	# Minimum NVDA version supported (e.g. "2019.3.0", minor version is optional)
-	"addon_minimumNVDAVersion": None,
+	"addon_minimumNVDAVersion": "2016.1",
 	# Last NVDA version supported/tested (e.g. "2024.4.0", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion": None,
+	"addon_lastTestedNVDAVersion": "2025.1",
 	# Add-on update channel (default is None, denoting stable releases,
 	# and for development releases, use "dev".)
 	# Do not change unless you know what you are doing!
 	"addon_updateChannel": None,
 	# Add-on license such as GPL 2
-	"addon_license": None,
+	"addon_license": "GPL v2",
 	# URL for the license document the ad-on is licensed under
-	"addon_licenseURL": None,
+	"addon_licenseURL": "https://www.gnu.org/licenses/gpl-2.0.html",
 }
 
 # Define the python files that are the sources of your add-on.
@@ -57,14 +56,17 @@ It can span multiple lines."""),
 # pythonSources = ["addon/globalPlugins/*.py"]
 # For more information on SCons Glob expressions please take a look at:
 # https://scons.org/doc/production/HTML/scons-user/apd.html
-pythonSources = []
+pythonSources = ["addon/globalPlugins/audioDuckingEnabler/*.py"]
 
 # Files that contain strings for translation. Usually your python sources
 i18nSources = pythonSources + ["buildVars.py"]
 
 # Files that will be ignored when building the nvda-addon file
 # Paths are relative to the addon directory, not to the root directory of your addon sources.
-excludedFiles = []
+excludedFiles = [
+	"globalPlugins\\audioDuckingEnabler\\dllmain.obj",
+	"globalPlugins\\audioDuckingEnabler\\dllmain.cpp",
+]
 
 # Base language for the NVDA add-on
 # If your add-on is written in a language other than english, modify this variable.
