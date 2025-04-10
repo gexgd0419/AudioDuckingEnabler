@@ -14,31 +14,45 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
-
-    - run: echo -e "pre-commit\nscons\nmarkdown">requirements.txt
+    - name: Checkout addon
+      uses: actions/checkout@v4
+      with:
+        submodules: true
+    
+    - name: Checkout nvda-misc-deps
+      uses: actions/checkout@v4
+      with:
+        repository: 'nvaccess/nvda-misc-deps'
+        path: 'miscDeps'
 
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: 3.11
-        cache: 'pip'
+        architecture: x86
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip wheel
-        pip install -r requirements.txt
-        sudo apt-get update  -y
-        sudo apt-get install -y gettext
+        pip install pre-commit scons markdown
 
     - name: Code checks
-      run: export SKIP=no-commit-to-branch; pre-commit run --all
+      run: |
+        $env:SKIP = "no-commit-to-branch"
+        pre-commit run --all
 
-    - name: building addon
-      run: scons && scons pot
+    - name: Build addon
+      run: |
+        $env:PATH += ";$env:GITHUB_WORKSPACE\miscDeps\tools"
+        scons
+
+    - name: Build pot
+      run: |
+        $env:PATH += ";$env:GITHUB_WORKSPACE\miscDeps\tools"
+        scons pot
 
     - uses: actions/upload-artifact@v4
       with:
