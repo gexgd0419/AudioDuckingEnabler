@@ -54,7 +54,7 @@ jobs:
         $env:PATH += ";$env:GITHUB_WORKSPACE\miscDeps\tools"
         scons pot
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         name: packaged_addon
         path: |
